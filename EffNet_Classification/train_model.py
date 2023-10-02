@@ -31,7 +31,7 @@ def main():
     my_parser = argparse.ArgumentParser()
     my_parser.add_argument('--epochs', type=int, default=5000, help='number of epochs to train our network for')
     my_parser.add_argument('--gpu', type=int, default=0, help='Number GPU 0,1')
-    my_parser.add_argument('--data_path', type=str, default='/home/kannika/codes_AI/Rheology_Blood/Dataset_Rheology_Blood_Viscosity_HN_NBL-2dFFTdataset-3channels-6Fold.csv')
+    my_parser.add_argument('--data_path', type=str, default='/home/kannika/codes_AI/Rheology_Blood/Dataset_Rheology_Blood_Viscosity_HN_NBL-2dFFTdataset-3channels-6Fold-splitclass.csv')
     my_parser.add_argument('--save_dir', type=str, help='Main Output Path', default="/media/SSD/rheology2023/EffNetB7Model/Classification/Blood_Viscosity")
     my_parser.add_argument('--name', type=str, help='Name to save output in save_dir')
     my_parser.add_argument('--R', type=int, help='[1:R1, 2:R2]')
@@ -87,12 +87,13 @@ def main():
     
     ## import dataset
     df_2dFFT = pd.read_csv(data_path)
-    train_2dFFT = df_2dFFT[df_2dFFT['fold']!=fold].reset_index(drop=True)
     print(f"Dataset set: {train_2dFFT.shape[0]} 2dFFT images")
+    DFtrain = df_2dFFT[df_2dFFT['fold']!=fold].reset_index(drop=True)
+    DFvalid = df_2dFFT[df_2dFFT['fold']==fold].reset_index(drop=True)
     ## Split train, validation set
-    DFtrain, DFvalid = split_valid_train(train_2dFFT)
+    #DFtrain, DFvalid = split_valid_train(train_2dFFT)
     print(f"[INFO]: For Train Set : With Shape {DFtrain.shape}")
-    print(f"[INFO]: For Valid Set : With Shape {DFvalid.shape}")
+    print(f"[INFO]: For Validation Set : With Shape {DFvalid.shape}")
     ### Get data Loder
     train_generator, test_generator = Data_generator(IMAGE_SIZE, BATCH_SIZE, DFtrain, DFvalid)
     
