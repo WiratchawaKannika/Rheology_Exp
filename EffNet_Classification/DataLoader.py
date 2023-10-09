@@ -56,7 +56,7 @@ def Data_generator(IMAGE_SIZE, BATCH_SIZE, DFtrain, DFvalid, colums_y):
                     dataframe = DFtrain,
                     directory = None,
                     x_col = 'image_path',
-                    y_col = colums_y',
+                    y_col = colums_y,
                     target_size = IMAGE_SIZE,
                     batch_size=BATCH_SIZE,
                     color_mode= 'rgb',

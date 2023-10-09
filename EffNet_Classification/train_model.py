@@ -77,7 +77,7 @@ def main():
     elif args.resume and args.R == 2:
         input_shape, model = loadresumemodel(args.checkpoint_dir)
     else:    
-        input_shape, model = build_modelB7(fine_tune=True, args.numclass)
+        input_shape, model = build_modelB7(fine_tune=True, Numclasses=args.numclass)
     ##get images size 
     height = width = input_shape[1]
     IMAGE_SIZE = (height, width)
