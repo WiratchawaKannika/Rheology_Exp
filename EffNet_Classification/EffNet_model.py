@@ -11,7 +11,7 @@ from tensorflow.keras.models import load_model
 
 
 
-def build_modelB7(fine_tune):
+def build_modelB7(fine_tune, Numclasses):
     """
     :param fine_tune (bool): Whether to train the hidden layers or not.
     """
@@ -26,10 +26,10 @@ def build_modelB7(fine_tune):
     # create new model with a new classification layer
     x = conv_base.output  
     global_average_layer = layers.GlobalAveragePooling2D(name = 'head_pooling')(x)
-    dropout_layer_1 = layers.Dropout(0.50,name = 'head_dropout')(global_average_layer)
-    prediction_layer = layers.Dense(2, activation='softmax',name = 'prediction_blood')(dropout_layer_1)
+    dropout_layer_1 = layers.Dropout(0.50, name = 'head_dropout')(global_average_layer)
+    prediction_layer = layers.Dense(Numclasses, activation='softmax',name = 'prediction_blood')(dropout_layer_1)
     ### lastlayer 
-    model = models.Model(inputs= conv_base.input, outputs=prediction_layer, name = 'EffNet_Binary') 
+    model = models.Model(inputs= conv_base.input, outputs=prediction_layer, name = 'EffNetModel_Blood') 
 
     print('This is the number of trainable layers '
           'before freezing the conv base:', len(model.trainable_weights))

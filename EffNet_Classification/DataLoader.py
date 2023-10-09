@@ -51,12 +51,12 @@ train_datagen = ImageDataGenerator(
 test_datagen = ImageDataGenerator(rescale=1./255)
 
 
-def Data_generator(IMAGE_SIZE, BATCH_SIZE, DFtrain, DFvalid):
+def Data_generator(IMAGE_SIZE, BATCH_SIZE, DFtrain, DFvalid, colums_y):
     train_generator = train_datagen.flow_from_dataframe(
                     dataframe = DFtrain,
                     directory = None,
                     x_col = 'image_path',
-                    y_col = 'classes',
+                    y_col = colums_y',
                     target_size = IMAGE_SIZE,
                     batch_size=BATCH_SIZE,
                     color_mode= 'rgb',
@@ -66,7 +66,7 @@ def Data_generator(IMAGE_SIZE, BATCH_SIZE, DFtrain, DFvalid):
                     dataframe = DFvalid,
                     directory = None,
                     x_col = 'image_path',
-                    y_col = 'classes',
+                    y_col = colums_y,
                     target_size = IMAGE_SIZE,
                     batch_size=BATCH_SIZE,
                     color_mode= 'rgb',

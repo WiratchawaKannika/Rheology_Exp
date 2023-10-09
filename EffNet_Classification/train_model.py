@@ -31,11 +31,12 @@ def main():
     my_parser = argparse.ArgumentParser()
     my_parser.add_argument('--epochs', type=int, default=5000, help='number of epochs to train our network for')
     my_parser.add_argument('--gpu', type=int, default=0, help='Number GPU 0,1')
-    my_parser.add_argument('--data_path', type=str, default='/home/kannika/codes_AI/Rheology_Blood/Dataset_Rheology_Blood_Viscosity_HN_NBL-2dFFTdataset-3channels-6Fold-splitclass.csv')
+    my_parser.add_argument('--numclass', type=int, default=2, help='[2, 3]')
+    my_parser.add_argument('--data_path', type=str, default='/home/kannika/codes_AI/Rheology_Blood/Dataset_Rheology_Blood_Viscosity_HN_NBL-2dFFTdataset-3channels-6Fold-split3class.csv')
     my_parser.add_argument('--save_dir', type=str, help='Main Output Path', default="/media/SSD/rheology2023/EffNetB7Model/Classification/Blood_Viscosity")
     my_parser.add_argument('--name', type=str, help='Name to save output in save_dir')
     my_parser.add_argument('--R', type=int, help='[1:R1, 2:R2]')
-    my_parser.add_argument('--fold', type=int, help='[fold 1-10]')
+    my_parser.add_argument('--fold', type=int, help='[fold 1-6]')
     my_parser.add_argument('--lr', type=float, default=1e-4)
     my_parser.add_argument('--batchsize', type=int, default=16)
     my_parser.add_argument('--resume', action='store_true')
@@ -66,7 +67,6 @@ def main():
     data_path = args.data_path
     BATCH_SIZE = args.batchsize
     ## train seting
-    lr = args.lr
     num_epochs = args.epochs
     
     ### Create Model 
@@ -77,7 +77,7 @@ def main():
     elif args.resume and args.R == 2:
         input_shape, model = loadresumemodel(args.checkpoint_dir)
     else:    
-        input_shape, model = build_modelB7(fine_tune=True)
+        input_shape, model = build_modelB7(fine_tune=True, args.numclass)
     ##get images size 
     height = width = input_shape[1]
     IMAGE_SIZE = (height, width)
@@ -87,7 +87,7 @@ def main():
     
     ## import dataset
     df_2dFFT = pd.read_csv(data_path)
-    print(f"Dataset set: {train_2dFFT.shape[0]} 2dFFT images")
+    print(f"Dataset set: {df_2dFFT.shape[0]} 2dFFT images")
     DFtrain = df_2dFFT[df_2dFFT['fold']!=fold].reset_index(drop=True)
     DFvalid = df_2dFFT[df_2dFFT['fold']==fold].reset_index(drop=True)
     ## Split train, validation set
@@ -95,7 +95,12 @@ def main():
     print(f"[INFO]: For Train Set : With Shape {DFtrain.shape}")
     print(f"[INFO]: For Validation Set : With Shape {DFvalid.shape}")
     ### Get data Loder
-    train_generator, test_generator = Data_generator(IMAGE_SIZE, BATCH_SIZE, DFtrain, DFvalid)
+    if args.numclass == 3:
+        colums_y = "subclass"
+    elif args.numclass == 2:
+        colums_y = "classes"
+         
+    train_generator, test_generator = Data_generator(IMAGE_SIZE, BATCH_SIZE, DFtrain, DFvalid, colums_y)
     
     ## Set mkdir TensorBoard 
     ##root_logdir = f'/media/SSD/rheology2023/VitModel/Regression/tensorflow/ExpTest/R1/Mylogs_tensor/'
@@ -107,7 +112,7 @@ def main():
     ##*** mkdir Modelname 
     modelNamemkdir = f"{root_base}/{args.FmodelsName}"
     os.makedirs(modelNamemkdir, exist_ok=True)
-    modelName = f"EffNetB7_HN-NBL_Class_{_fold}_{_R}.h5"
+    modelName = f"EffNetB7_{args.numclass}_Class_{_fold}_{_R}.h5"
     Model2save = f'{modelNamemkdir}/{modelName}'
     ##*** 
     root_Metrics = f'{root_base}/{args.epochendName}/'
@@ -122,10 +127,8 @@ def main():
     
     #Training
     from keras.optimizers import Adam
-    
-    lr=1e-4
     model.compile(loss='categorical_crossentropy',
-              optimizer=optimizers.RMSprop(lr=1e-4),
+              optimizer=optimizers.RMSprop(lr=args.lr),
               metrics=['acc'])
     
     ## Fit model 

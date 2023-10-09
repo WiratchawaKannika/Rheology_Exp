@@ -45,7 +45,7 @@ def main():
     my_parser = argparse.ArgumentParser(description='Convert Images to 2dFFT images; MSD')
     my_parser.add_argument('--pth2dt', type=str, help='path/to/filename.json', default='/media/SSD/rheology2023/P0100_D0_30HZ_20XINF_UWELL_20221222_174014_MSDT.json')
     my_parser.add_argument('--pth2dataset', type=str, help='Rheology Blood Viscosity Dataset', default='/home/kannika/codes_AI/Rheology_Blood/Dataset_Rheology_Blood_Viscosity_HN_NBL-Dataset-6Fold.csv')
-    my_parser.add_argument('--pth2save', type=str, help='Root pth to save 2dfft DATASET', default='/media/HDD/rheology2023/Blood_Viscosity_2dFFT/2dFFT_dataset/SSD_Backup_3')
+    my_parser.add_argument('--pth2save', type=str, help='Root pth to save 2dfft DATASET', default='/media/HDD/rheology2023/Blood_Viscosity_2dFFT/2dFFT_dataset/SSD_Backup_2')
     my_parser.add_argument('--pth2saveCSV', type=str, help='pth to save DataFrame 2dfft DATASET', default='/home/kannika/codes_AI/Rheology_Blood')
 
     args = my_parser.parse_args()
@@ -165,8 +165,8 @@ def main():
              'classes':classes_, 'Code_':Code_, 'subclass_':subclass_, 'fold':fold_}
     df_2dFFT = pd.DataFrame(dict)
     print(f"[INFO]: 2dFFT Dataset : Blood Viscosity ==> With Shape {df_2dFFT.shape}")
-    pth2saveCSV_ = f"{pth2saveCSV}/Dataset_Rheology_Blood_Viscosity_HN_NBL-2dFFTdataset-6Fold.csv"  ##** Set Csv Name. 
-    df_2dFFT.to_csv(pth2saveCSV_)
+    #pth2saveCSV_ = f"{pth2saveCSV}/Dataset_Rheology_Blood_Viscosity_HN_NBL-2dFFTdataset-6Fold.csv"  ##** Set Csv Name. 
+    #df_2dFFT.to_csv(pth2saveCSV_)
     print(f"Save Dataframe : DONE!!! at {pth2saveCSV_}")
 
 
