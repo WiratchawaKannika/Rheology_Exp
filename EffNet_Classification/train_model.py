@@ -32,7 +32,7 @@ def main():
     my_parser.add_argument('--epochs', type=int, default=5000, help='number of epochs to train our network for')
     my_parser.add_argument('--gpu', type=int, default=0, help='Number GPU 0,1')
     my_parser.add_argument('--numclass', type=int, default=2, help='[2, 3]')
-    my_parser.add_argument('--data_path', type=str, default='/home/kannika/codes_AI/Rheology_Blood/Dataset_Rheology_Blood_Viscosity_HN_NBL-2dFFTdataset-3channels-6Fold-split3class.csv')
+    my_parser.add_argument('--data_path', type=str, default='/home/kannika/codes_AI/Rheology_Blood/Dataset_Rheology_Blood_Viscosity_HN_NBL-2dFFTdataset-3channels-3Fold-split3class.csv')
     my_parser.add_argument('--save_dir', type=str, help='Main Output Path', default="/media/SSD/rheology2023/EffNetB7Model/Classification/Blood_Viscosity")
     my_parser.add_argument('--name', type=str, help='Name to save output in save_dir')
     my_parser.add_argument('--R', type=int, help='[1:R1, 2:R2]')
