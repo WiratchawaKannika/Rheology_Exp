@@ -112,7 +112,7 @@ def main():
     ##*** mkdir Modelname 
     modelNamemkdir = f"{root_base}/{args.FmodelsName}"
     os.makedirs(modelNamemkdir, exist_ok=True)
-    modelName = f"EffNetB7_{args.numclass}_Class_{_fold}_{_R}.h5"
+    modelName = f"EffNetB7_{args.numclass}Class_{_fold}_{_R}.h5"
     Model2save = f'{modelNamemkdir}/{modelName}'
     ##*** 
     root_Metrics = f'{root_base}/{args.epochendName}/'
