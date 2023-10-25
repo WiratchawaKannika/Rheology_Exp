@@ -31,9 +31,10 @@ def main():
     my_parser = argparse.ArgumentParser()
     my_parser.add_argument('--epochs', type=int, default=5000, help='number of epochs to train our network for')
     my_parser.add_argument('--gpu', type=int, default=0, help='Number GPU 0,1')
-    my_parser.add_argument('--numclass', type=int, default=2, help='[2, 3]')
-    my_parser.add_argument('--data_path', type=str, default='/home/kannika/codes_AI/Rheology_Blood/Dataset_Rheology_Blood_Viscosity_HN_NBL-2dFFTdataset-3channels-3Fold-split3class.csv')
-    my_parser.add_argument('--save_dir', type=str, help='Main Output Path', default="/media/SSD/rheology2023/EffNetB7Model/Classification/Blood_Viscosity")
+    #my_parser.add_argument('--numclass', type=int, default=2, help='[2, 3]')
+    my_parser.add_argument('--classname', type=str, help='[thalas2classes, thalas3classes, typeBEvsBM]')
+    my_parser.add_argument('--data_path', type=str, default='/home/kannika/code/Rheology2023/Rheology_Blood/Dataset_Blood_Viscosity-2dFFTdataset-3channels-3Fold-EMClasses.csv')
+    my_parser.add_argument('--save_dir', type=str, help='Main Output Path', default="/media/tohn/HDD/rheology2023/EffNetB7Model/Classification/Blood_Viscosity")
     my_parser.add_argument('--name', type=str, help='Name to save output in save_dir')
     my_parser.add_argument('--R', type=int, help='[1:R1, 2:R2]')
     my_parser.add_argument('--fold', type=int, help='[fold 1-6]')
@@ -69,6 +70,17 @@ def main():
     ## train seting
     num_epochs = args.epochs
     
+    ###Set columns name
+    if args.classname == "thalas3classes":
+        numclass = 3
+        colums_y = "subclass"
+    elif args.classname == "thalas2classes":
+        numclass = 2
+        colums_y = "classes"
+    elif args.classname == "typeBEvsBM":
+        numclass = 2
+        colums_y = "typeBEvsBM"
+   
     ### Create Model 
     if args.resume :
          input_shape, model = loadresumemodel(args.checkpoint_dir)
@@ -77,7 +89,7 @@ def main():
     elif args.resume and args.R == 2:
         input_shape, model = loadresumemodel(args.checkpoint_dir)
     else:    
-        input_shape, model = build_modelB7(fine_tune=True, Numclasses=args.numclass)
+        input_shape, model = build_modelB7(fine_tune=True, Numclasses=numclass)
     ##get images size 
     height = width = input_shape[1]
     IMAGE_SIZE = (height, width)
@@ -94,12 +106,7 @@ def main():
     #DFtrain, DFvalid = split_valid_train(train_2dFFT)
     print(f"[INFO]: For Train Set : With Shape {DFtrain.shape}")
     print(f"[INFO]: For Validation Set : With Shape {DFvalid.shape}")
-    ### Get data Loder
-    if args.numclass == 3:
-        colums_y = "subclass"
-    elif args.numclass == 2:
-        colums_y = "classes"
-         
+    ### Get data Loader
     train_generator, test_generator = Data_generator(IMAGE_SIZE, BATCH_SIZE, DFtrain, DFvalid, colums_y)
     
     ## Set mkdir TensorBoard 
@@ -112,7 +119,7 @@ def main():
     ##*** mkdir Modelname 
     modelNamemkdir = f"{root_base}/{args.FmodelsName}"
     os.makedirs(modelNamemkdir, exist_ok=True)
-    modelName = f"EffNetB7_{args.numclass}Class_{_fold}_{_R}.h5"
+    modelName = f"EffNetB7_{args.classname}_Class_{_fold}_{_R}.h5"
     Model2save = f'{modelNamemkdir}/{modelName}'
     ##*** 
     root_Metrics = f'{root_base}/{args.epochendName}/'
@@ -140,7 +147,7 @@ def main():
     # Save model as .h5        
     model.save(Model2save)
     ### print
-    print(f"Save EfficientNet model Binary Classification : {Model2save}")
+    print(f"Save EfficientNet model {args.classname} Classification : {Model2save}")
     print(f"*"*100)
     
 ## Run Function 
@@ -154,10 +161,3 @@ if __name__ == '__main__':
     
     
     
-    
-    
-
-
-
-
-

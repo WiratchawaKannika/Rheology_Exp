@@ -151,7 +151,7 @@ def main():
     # Save model as .h5        
     vit_model.save(Model2save)
     ### print
-    print(f"Save EfficientNet model {args.numclass} Classification : {Model2save}")
+    print(f"Save ViT model {args.classname} Classification : {Model2save}")
     print(f"*"*100)
     
     
