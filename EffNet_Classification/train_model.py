@@ -12,7 +12,6 @@ from keras.utils import generic_utils
 from keras import layers
 from keras import models
 from tensorflow.keras import optimizers
-from keras.optimizers import Adam
 from EffNet_model import build_modelB7, loadresumemodel, model_block7Unfreze, model_block5Unfreze
 from DataLoader import Data_generator, split_valid_train
 #load Check point
@@ -133,7 +132,7 @@ def main():
     metrics = Metrics()
     
     #Training
-    from keras.optimizers import Adam
+    from tensorflow.keras.optimizers import Adam
     model.compile(loss='categorical_crossentropy',
               optimizer=optimizers.RMSprop(lr=args.lr),
               metrics=['acc'])

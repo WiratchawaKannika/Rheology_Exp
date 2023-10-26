@@ -4,7 +4,6 @@ from keras.utils import generic_utils
 from keras import layers
 from keras import models
 from tensorflow.keras import optimizers
-from keras.optimizers import Adam
 from efficientnet.keras import EfficientNetB7 as Net
 #load Check point
 from tensorflow.keras.models import load_model
