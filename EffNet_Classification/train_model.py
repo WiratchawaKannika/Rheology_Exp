@@ -32,7 +32,7 @@ def main():
     my_parser.add_argument('--gpu', type=int, default=0, help='Number GPU 0,1')
     #my_parser.add_argument('--numclass', type=int, default=2, help='[2, 3]')
     my_parser.add_argument('--classname', type=str, help='[thalas2classes, thalas3classes, typeBEvsBM]')
-    my_parser.add_argument('--data_path', type=str, default='/home/kannika/code/Rheology2023/Rheology_Blood/Dataset_Blood_Viscosity-2dFFTdataset-3channels-3Fold-EMClasses.csv')
+    my_parser.add_argument('--data_path', type=str, default='/home/kannika/code/Rheology2023/Rheology_Blood/DataBlood_Viscosity_2dFFTdataset_3channels_6Fold_split2class-ver2.csv')
     my_parser.add_argument('--save_dir', type=str, help='Main Output Path', default="/media/tohn/HDD/rheology2023/EffNetB7Model/Classification/Blood_Viscosity")
     my_parser.add_argument('--name', type=str, help='Name to save output in save_dir')
     my_parser.add_argument('--R', type=int, help='[1:R1, 2:R2]')
